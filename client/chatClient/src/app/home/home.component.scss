@@ -23,6 +23,26 @@
   letter-spacing: 1.5px !important;
 }
 
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+
+  .user {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 7px;
+
+    h5 {
+      font-size: 80%;
+      padding: 0;
+      margin: 0;
+      height: 26px;
+    }
+  }
+}
+
 .messages {
   width: 100%;
   height: calc(100% - 120px);
@@ -41,6 +61,12 @@
   color: var(--primary50ct);
 }
 
+.message-limit {
+  display: flex;
+  min-width: 70%;
+  max-width: 500px;
+}
+
 .message-line {
   display: flex;
   flex-direction: row;
@@ -54,10 +80,27 @@
   justify-content: flex-start;
 }
 
+.message-limit.me {
+  justify-content: flex-end;
+}
+
+.message-limit.other {
+  justify-content: flex-start;
+}
+
 .message.me {
   background-color: var(--primary50ct);
   color: var(--primary300);
   margin-right: 15px;
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  .user-name {
+    color: var(--primary500);
+    text-align: right;
+  }
 }
 
 .message.other {
@@ -68,14 +111,21 @@
 
 .user-name {
   font-weight: bold;
+  color: var(--primary100ct);
+}
+
+.text {
+  display: flex;
+  height: fit-content;
+  word-break: break-word;
 }
 
 .footer {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
   padding: 10px 0 0;
-  background-color: var(--primary700ct);
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
+  background: radial-gradient(var(--primary700ct), var(--primary900ct));
 }
 
 .form {
@@ -83,20 +133,24 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  min-width: 80%;
-  max-width: 100%;
-  width: 98%;
+  width: 100%;
+  padding: 0 8px;
 
   button:hover {
     opacity: 0.7;
-    box-shadow: 2px 2px 2px 2px var(--primary200ct);
+    box-shadow: 2px 2px 2px 2px radial-gradient(var(--primary300ct), transparent);
   }
+}
+
+.error {
+  padding: 0 8px 10px;
 }
 
 .input {
   width: 90%;
   padding: 0 5px;
   color: var(--primary50ct);
+  font-size: 16px;
 
   mat-label {
     color: var(--primary200);

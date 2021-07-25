@@ -1,59 +1,85 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as signalr from '@microsoft/signalr';
+import { NameDialogComponent } from '../shared/components/name-dialog/name-dialog.component';
+import { MethodsName } from '../shared/models/constants/methodsName';
+import { Message } from '../shared/models/message';
 import { environment } from './../../environments/environment';
-
-type Message = {
-  userName: string,
-  text: string
-}
-
+import { validatorNoWhitespace } from './../shared/utils/utils';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-  messages: Message[] = [
-    {
-      text: 'Olá',
-      userName: 'Lucian'
-    },
-    {
-      text: 'Eae',
-      userName: 'Joana'
-    },
-    {
-      text: 'Salvee',
-      userName: 'Thiago'
-    }
-  ];
-  messageControl = new FormControl('');
-  userName = 'Lucian';
+export class HomeComponent {
+  messages: Message[] = [];
+  userName!: string;
   connection: signalr.HubConnection;
+  textControl!: FormControl;
 
-  constructor() {
+  constructor(
+    private readonly dialog: MatDialog,
+    private readonly snackBar: MatSnackBar
+  ) {
     this.connection = new signalr.HubConnectionBuilder()
       .withUrl(environment.urlServer).build();
 
-    this.startConnection();
+    this.formValidator();
+    this.openModal();
   }
 
-  ngOnInit(): void {
+  formValidator(): void {
+    this.textControl = new FormControl('', [Validators.required, validatorNoWhitespace]);
+  }
+
+  openModal(): void {
+    const dialogRef = this.dialog.open(NameDialogComponent, {
+      width: '350px',
+      data: this.userName,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result: string) => {
+      this.userName = result.toUpperCase();
+      this.startConnection();
+    })
+  }
+
+  openSnackBar(userName: string): void {
+    const message = userName === this.userName ? 'Você entrou na sala' : `${userName} acabou de entrar`;
+    this.snackBar.open(message, 'Fechar', {
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 
   startConnection(): void {
-    this.connection.on('newMessage', (userName: string, text: string) => {
+    this.connection.on(MethodsName.newMessage, (userName: string, text: string) => {
       this.messages = [...this.messages, { userName, text }];
     });
 
-    this.connection.start().then(() => console.log('server conected!'));
+    this.connection.on(MethodsName.newUser, (userName: string) => {
+      this.openSnackBar(userName);
+    });
+
+    this.connection.on(MethodsName.previousMessages, (messages: Message[]) => {
+      this.messages = messages;
+    });
+
+    this.connection.start()
+      .then(() => {
+        this.connection.send(MethodsName.newUser, this.userName, this.connection.connectionId);
+        this.openSnackBar(this.userName);
+      });
   }
 
   sendMessage(): void {
-    this.connection.send('newMessage', this.userName, this.messageControl.value)
+    this.connection.send(MethodsName.newMessage, this.userName, this.textControl.value)
       .then(() => {
-        this.messageControl.setValue('');
-      })
+        this.textControl.setValue('');
+      });
   }
 }

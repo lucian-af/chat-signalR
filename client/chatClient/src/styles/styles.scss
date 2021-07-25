@@ -13,6 +13,51 @@ html {
 body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;  
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
   background-color: var(--primary50ct);
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* cor de fundo do scroll */
+::-webkit-scrollbar-track {
+  background: var(--primary800ct);
+}
+
+/* scroll propriamente dito */
+::-webkit-scrollbar-thumb {
+  background: var(--primary300);
+  border-radius: 3px;
+}
+
+/* efeito ao passar o mouse ou clicar no scroll */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary600);
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple,
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+  background-color: var(--primary400) !important;
+}
+
+mat-error {
+  color: var(--primary300) !important;
+}
+
+.mat-form-field-subscript-wrapper {
+  font-size: 90%;
+}
+
+.mat-snack-bar-container {
+  color: var(--primary100ct);
+  background: var(--primary300);
+}
+
+.mat-simple-snackbar-action {
+  button {
+    background: var(--primary500ct);
+  }
 }

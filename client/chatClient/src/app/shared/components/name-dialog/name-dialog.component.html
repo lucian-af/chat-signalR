@@ -1,0 +1,27 @@
+<div class="container">
+  <h1 mat-dialog-title>Bem vindo!</h1>    
+  <div mat-dialog-content>
+    <p>Como quer ser chamado ?</p>
+    <mat-form-field>
+      <mat-label>Descrição</mat-label>
+      <input
+        class="text"
+        matInput
+        [(ngModel)]="description"
+        [formControl]="textControl"
+        cdkFocusInitial
+      />
+      <mat-error *ngIf="containsError && this.textControl.errors">informe como quer ser chamado </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="this.textControl.invalid"
+      [mat-dialog-close]="description"
+    >
+      Ok
+    </button>
+  </div>
+</div>

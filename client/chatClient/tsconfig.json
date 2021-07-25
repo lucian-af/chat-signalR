@@ -24,7 +24,9 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "removeComments": true,
-    "incremental": true
+    "incremental": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
